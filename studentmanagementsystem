@@ -1,0 +1,178 @@
+import java.util.*;
+
+class Student {
+    int studentId;
+    String name;
+    int age;
+    String course;
+    double marks;
+
+    Scanner sc = new Scanner(System.in);
+
+    // Input details
+    void inputDetails() {
+        System.out.print("Enter ID: ");
+        studentId = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Enter Name: ");
+        name = sc.nextLine();
+
+        System.out.print("Enter Age: ");
+        age = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("Enter Course: ");
+        course = sc.nextLine();
+
+        System.out.print("Enter Marks: ");
+        marks = sc.nextDouble();
+    }
+
+    // Display details
+    void displayDetails() {
+        System.out.println("ID: " + studentId);
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Course: " + course);
+        System.out.println("Marks: " + marks);
+        System.out.println("------------------------");
+    }
+}
+
+public class StudentManagementSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Student> list = new ArrayList<>();
+
+        int choice;
+
+        do {
+            System.out.println("\n1. Add Student");
+            System.out.println("2. Display All Students");
+            System.out.println("3. Search Student by ID");
+            System.out.println("4. Display Students with Marks Above X");
+            System.out.println("5. Average Marks");
+            System.out.println("6. Sort Students by Marks");
+            System.out.println("7. Update Student");
+            System.out.println("8. Delete Student");
+            System.out.println("9. Exit");
+
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                // Add student
+                case 1:
+                    Student s = new Student();
+                    s.inputDetails();
+                    list.add(s);
+                    break;
+
+                // Display all
+                case 2:
+                    if (list.isEmpty()) {
+                        System.out.println("No students found!");
+                    } else {
+                        for (Student st : list) {
+                            st.displayDetails();
+                        }
+                    }
+                    break;
+
+                // Search by ID
+                case 3:
+                    System.out.print("Enter ID to search: ");
+                    int id = sc.nextInt();
+                    boolean found = false;
+
+                    for (Student st : list) {
+                        if (st.studentId == id) {
+                            st.displayDetails();
+                            found = true;
+                        }
+                    }
+
+                    if (!found)
+                        System.out.println("Student not found!");
+                    break;
+
+                // Marks above X
+                case 4:
+                    System.out.print("Enter marks value: ");
+                    double m = sc.nextDouble();
+
+                    for (Student st : list) {
+                        if (st.marks > m) {
+                            st.displayDetails();
+                        }
+                    }
+                    break;
+
+                // Average marks
+                case 5:
+                    double sum = 0;
+                    for (Student st : list) {
+                        sum += st.marks;
+                    }
+                    if (list.size() > 0)
+                        System.out.println("Average Marks: " + (sum / list.size()));
+                    else
+                        System.out.println("No students available");
+                    break;
+
+                // Sort by marks
+                case 6:
+                    Collections.sort(list, (a, b) -> Double.compare(a.marks, b.marks));
+                    System.out.println("Sorted by Marks!");
+                    break;
+
+                // Update student
+                case 7:
+                    System.out.print("Enter ID to update: ");
+                    int uid = sc.nextInt();
+
+                    for (Student st : list) {
+                        if (st.studentId == uid) {
+                            System.out.println("Enter new details:");
+                            st.inputDetails();
+                            System.out.println("Updated!");
+                            break;
+                        }
+                    }
+                    break;
+
+                // Delete student
+                case 8:
+                    System.out.print("Enter ID to delete: ");
+                    int did = sc.nextInt();
+
+                    Iterator<Student> it = list.iterator();
+                    boolean deleted = false;
+
+                    while (it.hasNext()) {
+                        Student st = it.next();
+                        if (st.studentId == did) {
+                            it.remove();
+                            deleted = true;
+                            System.out.println("Deleted!");
+                            break;
+                        }
+                    }
+
+                    if (!deleted)
+                        System.out.println("Student not found!");
+                    break;
+
+                case 9:
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+
+        } while (choice != 9);
+    }
+}
